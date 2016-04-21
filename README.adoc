@@ -121,7 +121,7 @@ The project must be implemented in student groups of two.
 Please notify rahel.luethy@fhnw.ch of your group composition by May 4, 2016.
 The final application must be submitted via Moodle (ZIP/RAR/TAR archive containing complete, runnable source code).
 
-IMPORTANT: Project submission deadline: Sunday, July 5, 2016 24:00 CEST
+IMPORTANT: Project submission deadline: Sunday, June 5, 2016 24:00 CEST
 
 == Grading
 The final project grade accounts for 50% of the module grade (the other 50% are determined by the written exam).
