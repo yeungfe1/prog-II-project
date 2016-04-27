@@ -12,7 +12,7 @@ public final class App extends Application {
 
     @Override
     public void start(Stage stage) {
-
+//
       /*  //test commit
         //testtst
         // Asserts correct project setup (will only compile with Java 8)
