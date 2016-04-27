@@ -28,6 +28,7 @@ public final class App extends Application {
 
 // was isch los?!
         //nüt isch los!!!!
+        //was nit? weisch wer am sunntig nochhilf git ;)
 
         //Button button2 =new Button("Button2");
 
