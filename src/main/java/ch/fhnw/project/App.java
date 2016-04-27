@@ -12,7 +12,7 @@ public final class App extends Application {
 
     @Override
     public void start(Stage stage) {
-
+//
       /*  //test commit
         //testtst
         // Asserts correct project setup (will only compile with Java 8)
@@ -27,8 +27,6 @@ public final class App extends Application {
         });
 
 // was isch los?!
-        //nüt isch los!!!!
-        //was nit? weisch wer am sunntig nochhilf git ;)
 
         //Button button2 =new Button("Button2");
 
