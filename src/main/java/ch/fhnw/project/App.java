@@ -26,6 +26,7 @@ public final class App extends Application {
 
         });
 
+// was isch los?!
 
         //Button button2 =new Button("Button2");
 
