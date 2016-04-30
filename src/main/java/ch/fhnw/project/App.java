@@ -19,14 +19,10 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public final class App extends Application {
@@ -39,32 +35,25 @@ public final class App extends Application {
     @Override
     public void start(Stage stage) {
 
+
+        //Init Buttons
+        Button bt1 = new Button("button1");
+
+
+        //Init Labels
+        Label la1 = new Label("label1");
+
+        FlowPane pane = new FlowPane();
+
         FileChooser fc = new FileChooser();
 
         List<String> listTest =new ArrayList<>();
         List<String> listTestx =new ArrayList<>();
         List<String> listTesty =new ArrayList<>();
 
-
-
-
-
-
-        //Plotting-----------------test-------------
-        stage.setTitle("Plotting");
-        final NumberAxis xAxis = new NumberAxis(0, 10, 1);
-        final NumberAxis yAxis = new NumberAxis(-100, 500, 100);
-        final ScatterChart<Number,Number> sc = new
-                ScatterChart<Number,Number>(xAxis,yAxis);
-        xAxis.setLabel("xAxis");
-        yAxis.setLabel("yAxis");
-        sc.setTitle("title");
-
-
-
         XYChart.Series series1 = new XYChart.Series();
         //series1.setName("series");
-        series1.getData().add(new XYChart.Data(4.2, 193.2));
+       /* series1.getData().add(new XYChart.Data(4.2, 193.2));
         series1.getData().add(new XYChart.Data(2.8, 33.6));
         series1.getData().add(new XYChart.Data(6.2, 24.8));
         series1.getData().add(new XYChart.Data(1, 14));
@@ -79,19 +68,19 @@ public final class App extends Application {
         series1.getData().add(new XYChart.Data(7.3, -42.3));
         series1.getData().add(new XYChart.Data(1.8, 81.4));
         series1.getData().add(new XYChart.Data(7.3, 110.3));
-        series1.getData().add(new XYChart.Data(2.7, 41.2));
-
-        sc.getData().addAll(series1);
+        series1.getData().add(new XYChart.Data(2.7, 41.2));*/
 
 
-        //Init Buttons
-        Button bt1 = new Button("button1");
+        /*final NumberAxis xAxis = new NumberAxis(listTestx.indexOf(Collections.min(listTestx)), listTestx.indexOf(Collections.max(listTestx)), 0.1);
+        final NumberAxis yAxis = new NumberAxis(listTestx.indexOf(Collections.min(listTesty)), listTestx.indexOf(Collections.max(listTesty)), 0.1);
+        final ScatterChart<Number,Number> sc = new ScatterChart<Number,Number>(xAxis,yAxis);*/
+
+        NumberAxis xAxis = new NumberAxis(-5,5, 0.1);
+        NumberAxis yAxis = new NumberAxis(-5,5, 0.1);
+        ScatterChart<Number,Number> sc = new ScatterChart<Number,Number>(xAxis,yAxis);
 
 
-        //Init Labels
-        Label la1 = new Label("label1");
 
-        FlowPane pane = new FlowPane();
 
         //actions
         bt1.setOnAction(actionEvent ->
@@ -108,11 +97,9 @@ public final class App extends Application {
             } catch (FileNotFoundException e) {
                 System.err.println("Reading file failed: " + e.getMessage());
             }
-            //System.out.print(listTest.get(0));
-            //System.out.println(listTest.size()); // TEST LIST
 
             int n=0;
-            int m=0;
+
             for (String element : listTest) {
 
                 if(n%2 == 0 ) {
@@ -121,22 +108,23 @@ public final class App extends Application {
                     listTesty.add(listTest.get(n));
                 }
                 n++;
-
           }
-            for (String elementx : listTestx) {
-                System.out.print(elementx); // TEST LIST
-
-                System.out.print(" "+ listTesty.get(m) + "\n");
-                m++;
 
 
+            xAxis.setLabel(listTestx.get(0));
+            yAxis.setLabel(listTesty.get(0));
+            //sc.setTitle("title");
 
-
+            int count=1;    //without name
+            while (count <listTestx.size()){
+                series1.getData().add(new XYChart.Data(Double.parseDouble(listTestx.get(count)), Double.parseDouble(listTesty.get(count))));
+                count++;
             }
+
 
         });
 
-
+        sc.getData().addAll(series1);
         //get all features
         pane.getChildren().addAll(bt1, la1,sc);
 
