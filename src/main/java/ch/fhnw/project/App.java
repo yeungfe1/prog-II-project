@@ -22,6 +22,8 @@ import javafx.stage.Stage;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -38,17 +40,13 @@ public final class App extends Application {
 
         FileChooser fc = new FileChooser();
 
+        List<String> listTest =new ArrayList<>();
 
-        //Test FileChooser!
-        File file = fc.showOpenDialog(stage);
 
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNext()) {
-                System.out.println(scanner.next());
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("Reading file failed: " + e.getMessage());
-        }
+
+
+
+
 
         //Plotting-----------------test-------------
         stage.setTitle("Plotting");
@@ -81,29 +79,7 @@ public final class App extends Application {
         series1.getData().add(new XYChart.Data(7.3, 110.3));
         series1.getData().add(new XYChart.Data(2.7, 41.2));
 
-
-
         sc.getData().addAll(series1);
-
-
-
-
-     /*   // Create the canvas
-        Canvas canvas = new Canvas(600, 600);
-
-        // Get the graphic context
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        Circle circle = new Circle();
-        circle.setRadius(2);
-        circle.setCenterX(100);
-        circle.setCenterY(100);
-        circle.setFill(Color.RED);
-
-        //gc.fillOval(100,100,6,6);     Punkt erstellen*/
-
-
-
 
 
         //Init Buttons
@@ -119,6 +95,19 @@ public final class App extends Application {
         bt1.setOnAction(actionEvent ->
         {
             pane.setStyle("-fx-background-color: lightblue");
+            //Test FileChooser!
+            File file = fc.showOpenDialog(stage);
+
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNext()) {
+                    listTest.add(scanner.next());
+                    //System.out.println(scanner.next());
+                }
+            } catch (FileNotFoundException e) {
+                System.err.println("Reading file failed: " + e.getMessage());
+            }
+            System.out.print(listTest.get(0));
+            //System.out.println(listTest.size()); // TEST LIST
         });
 
 
