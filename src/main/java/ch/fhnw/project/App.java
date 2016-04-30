@@ -20,6 +20,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -41,7 +42,8 @@ public final class App extends Application {
         FileChooser fc = new FileChooser();
 
         List<String> listTest =new ArrayList<>();
-
+        List<String> listTestx =new ArrayList<>();
+        List<String> listTesty =new ArrayList<>();
 
 
 
@@ -106,8 +108,32 @@ public final class App extends Application {
             } catch (FileNotFoundException e) {
                 System.err.println("Reading file failed: " + e.getMessage());
             }
-            System.out.print(listTest.get(0));
+            //System.out.print(listTest.get(0));
             //System.out.println(listTest.size()); // TEST LIST
+
+            int n=0;
+            int m=0;
+            for (String element : listTest) {
+
+                if(n%2 == 0 ) {
+                    listTestx.add(listTest.get(n));
+                }else {
+                    listTesty.add(listTest.get(n));
+                }
+                n++;
+
+          }
+            for (String elementx : listTestx) {
+                System.out.print(elementx); // TEST LIST
+
+                System.out.print(" "+ listTesty.get(m) + "\n");
+                m++;
+
+
+
+
+            }
+
         });
 
 
