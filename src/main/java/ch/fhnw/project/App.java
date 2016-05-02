@@ -50,18 +50,17 @@ public final class App extends Application {
         List<Double> serie1Number = new ArrayList<>();
         List<Double> serie2Number = new ArrayList<>();
 
+
+
         String name1, name2;
 
 
         XYChart.Series series1 = new XYChart.Series();
-        List<Double> list = new ArrayList<>();
 
 
 
         File file = filefc.showOpenDialog(stage);
         ChooseData(serie1, serie2, file);
-
-
 
         name1 = serie1.get(0);
         name2 = serie2.get(0);
@@ -74,28 +73,46 @@ public final class App extends Application {
 
             serie1Number.add(Double.parseDouble(element));
         }
+        for (String element : serie2){
 
-        Collections.sort(serie1Number);
-        Collections.sort(serie2Number);
+            serie2Number.add(Double.parseDouble(element));
+        }
+        NumberAxis xAxis = new NumberAxis(getMin(serie1Number),getMax(serie1Number), 1);
+        NumberAxis yAxis = new NumberAxis(getMin(serie2Number),getMax(serie2Number),1);
+
 
         Double maxValue = Collections.max(serie1Number);
+        final ScatterChart<Number,Number> sc =
+                new ScatterChart<Number,Number>(xAxis,yAxis);
 
 
         //actions
         bt1.setOnAction(actionEvent ->
         {
-            pane.setStyle("-fx-background-color: lightblue");
+            //pane.setStyle("-fx-background-color: lightblue");
 
             System.out.print(getMax(serie1Number));
 
+            int count =0;
+            while ( count < serie1Number.size()) {
+
+                series1.getData().add(new ScatterChart.Data<Number, Number>(serie1Number.get(count), serie2Number.get(count)));
+                count++;
+
+
+            }
+            for (Double element : serie1Number){
+
+            }
 
         });
 
+        sc.getData().addAll(series1);
 
-        pane.getChildren().addAll(bt1, la1);
+        pane.getChildren().addAll(bt1, la1,sc);
 
 
-        Scene scence = new Scene(pane, 500, 500);
+        Scene scence = new Scene(pane, 800, 800);
 
 
         stage.setTitle("App_Project");
@@ -103,6 +120,8 @@ public final class App extends Application {
         stage.show();
 
     }
+
+
 
     private void ChooseData(List<String> serie1, List<String> serie2, File file) {
         try (Scanner scanner = new Scanner(file)) {
@@ -130,7 +149,16 @@ public final class App extends Application {
         return maxValue;
     }
 
-}
+    private  Double getMin(List<Double> test)
+    {
+        Double maxValue;
 
-//
+        maxValue=Collections.min(test);
+
+        return maxValue;
+    }
+
+
+
+}
 

@@ -78,7 +78,6 @@ public final class DataRead extends Application {
         return maxValue;
     }
 
-    //
 
 
 
