@@ -1,23 +1,9 @@
 package ch.fhnw.project;
 
 
-        import com.sun.org.apache.xerces.internal.xs.StringList;
-        import com.sun.tools.javac.util.*;
+
         import javafx.application.Application;
-        import javafx.geometry.Point2D;
-        import javafx.scene.Scene;
-        import javafx.scene.canvas.Canvas;
-        import javafx.scene.canvas.GraphicsContext;
-        import javafx.scene.chart.NumberAxis;
-        import javafx.scene.chart.ScatterChart;
-        import javafx.scene.chart.XYChart;
-        import javafx.scene.control.Button;
-        import javafx.scene.control.Label;
-        import javafx.scene.effect.Light;
-        import javafx.scene.layout.FlowPane;
-        import javafx.scene.layout.Pane;
-        import javafx.scene.paint.Color;
-        import javafx.scene.shape.Circle;
+
         import javafx.stage.FileChooser;
         import javafx.stage.Stage;
 
@@ -39,6 +25,8 @@ public final class DataRead extends Application {
         List<String> toList = new ArrayList<>();
         List<String> serie1 = new ArrayList<>();
         List<String> serie2 = new ArrayList<>();
+        List<Double> serie1Number = new ArrayList<>();
+        List<Double> serie2Number = new ArrayList<>();
 
         List<Double> list = new ArrayList<>();
 
@@ -54,61 +42,29 @@ public final class DataRead extends Application {
                 serie1.add(scanner.next());
                 serie2.add(scanner.next());
 
-
-         //  System.out.print(scanner.next());
             }
-
 
         } catch (FileNotFoundException e) {
             System.err.println("Reading file failed: " + e.getMessage());
         }
 
+        serie1.remove(0);
+        serie2.remove(0);
 
-        for (String element: toList){
-            System.out.print(element);
+        for (String element : serie1){
+
+            serie1Number.add(Double.parseDouble(element));
         }
 
-
-
-
+        Collections.sort(serie1Number);
+        for(Double element : serie1Number){
+            System.out.println(element);
+        }
+        System.out.println(Collections.max(serie1));
 
     }
 
-/*    double getMaximumOfList(List<String> list)
-    {
-      //  List<String> listr =new ArrayList<>();
-        List<Double> listd= new ArrayList<>();
 
-        for (String element : list)
-        {
-            listd.add(Double.parseDouble(element));
-        }
-
-
-
-        Collections.sort(listd); // Sort the arraylist
-       // String test=list.get(list.size() - 1); //gets the last item, largest for an ascending sort
-       double test = listd.get(listd.size() - 1);
-        System.out.print(test);
-        return test;
-    }
-
-    double getMinimumOfList(List<String> list)
-    {
-        //  List<String> listr =new ArrayList<>();
-        List<Double> listd= new ArrayList<>();
-
-        for (String element : list)
-        {
-            listd.add(Double.parseDouble(element));
-        }
-
-        Collections.sort(listd); // Sort the arraylist
-        // String test=list.get(list.size() - 1); //gets the last item, largest for an ascending sort
-        double test = listd.get(listd.size());
-        System.out.print(test);
-        return test;
-    }*/
 }
 
 
