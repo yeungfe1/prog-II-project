@@ -52,8 +52,49 @@ public final class App extends Application {
         XYChart.Series series1 = new XYChart.Series();
 
 
+        FileChooser filefc = new FileChooser();
 
-        File file = fc.showOpenDialog(stage);
+        List<String> toList = new ArrayList<>();
+        List<String> serie1 = new ArrayList<>();
+        List<String> serie2 = new ArrayList<>();
+        List<Double> serie1Number = new ArrayList<>();
+        List<Double> serie2Number = new ArrayList<>();
+
+        List<Double> list = new ArrayList<>();
+
+
+        File file = filefc.showOpenDialog(stage);
+
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNext()) {
+                scanner.useDelimiter("\t|\n");
+
+
+                serie1.add(scanner.next());
+                serie2.add(scanner.next());
+
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Reading file failed: " + e.getMessage());
+        }
+
+        serie1.remove(0);
+        serie2.remove(0);
+
+        for (String element : serie1){
+
+            serie1Number.add(Double.parseDouble(element));
+        }
+
+        Collections.sort(serie1Number);
+
+        for(Double element : serie1Number){
+            //System.out.println(element);
+        }
+        //System.out.println(getMax(serie1Number));
+       /* File file = fc.showOpenDialog(stage);
 
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNext()) {
@@ -62,32 +103,9 @@ public final class App extends Application {
             }
         } catch (FileNotFoundException e) {
             System.err.println("Reading file failed: " + e.getMessage());
-        }
-
-        int n=0;
-
-        for (String element : listTest) {
-
-            if(n%2 == 0 ) {
-                listTestx.add(listTest.get(n));
-            }else {
-                listTesty.add(listTest.get(n));
-            }
-            n++;
-        }
+        }*/
 
 
-
-        /*final NumberAxis xAxis = new NumberAxis(getMinimumOfList(listTestx),getMaximumOfList(listTestx), 0.01);
-        final NumberAxis yAxis = new NumberAxis(getMinimumOfList(listTesty),getMaximumOfList(listTesty), 0.01);
-
-
-        final ScatterChart<Number,Number> sc = new ScatterChart<Number,Number>(xAxis,yAxis);
-*/
-
-        NumberAxis xAxis = new NumberAxis(-5,5, 0.1);
-        NumberAxis yAxis = new NumberAxis(-5,5, 0.1);
-        ScatterChart<Number,Number> sc = new ScatterChart<Number,Number>(xAxis,yAxis);
 
 
 
@@ -98,22 +116,13 @@ public final class App extends Application {
             pane.setStyle("-fx-background-color: lightblue");
             //Test FileChooser!
 
+            System.out.print(DataRead.getMax())
 
-            xAxis.setLabel(listTestx.get(0));
-            yAxis.setLabel(listTesty.get(0));
-            //sc.setTitle("title");
-
-            int count=1;    //without name
-            while (count <listTestx.size()){
-                series1.getData().add(new XYChart.Data(Double.parseDouble(listTestx.get(count)), Double.parseDouble(listTesty.get(count))));
-                count++;
-            }
 
         });
 
-        sc.getData().addAll(series1);
-        //get all features
-        pane.getChildren().addAll(bt1, la1,sc);
+
+        pane.getChildren().addAll(bt1, la1);
 
 
         Scene scence = new Scene(pane, 500, 500);
@@ -125,41 +134,6 @@ public final class App extends Application {
 
     }
 
-/*    double getMaximumOfList(List<String> list)
-    {
-      //  List<String> listr =new ArrayList<>();
-        List<Double> listd= new ArrayList<>();
-
-        for (String element : list)
-        {
-            listd.add(Double.parseDouble(element));
-        }
-
-
-
-        Collections.sort(listd); // Sort the arraylist
-       // String test=list.get(list.size() - 1); //gets the last item, largest for an ascending sort
-       double test = listd.get(listd.size() - 1);
-        System.out.print(test);
-        return test;
-    }
-
-    double getMinimumOfList(List<String> list)
-    {
-        //  List<String> listr =new ArrayList<>();
-        List<Double> listd= new ArrayList<>();
-
-        for (String element : list)
-        {
-            listd.add(Double.parseDouble(element));
-        }
-
-        Collections.sort(listd); // Sort the arraylist
-        // String test=list.get(list.size() - 1); //gets the last item, largest for an ascending sort
-        double test = listd.get(listd.size());
-        System.out.print(test);
-        return test;
-    }*/
 }
 
 

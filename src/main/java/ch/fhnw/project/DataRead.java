@@ -34,35 +34,54 @@ public final class DataRead extends Application {
         File file = filefc.showOpenDialog(stage);
 
 
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNext()) {
-                scanner.useDelimiter("\t|\n");
+    try (Scanner scanner = new Scanner(file)) {
+        while (scanner.hasNext()) {
+            scanner.useDelimiter("\t|\n");
 
 
-                serie1.add(scanner.next());
-                serie2.add(scanner.next());
+            serie1.add(scanner.next());
+            serie2.add(scanner.next());
 
-            }
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Reading file failed: " + e.getMessage());
         }
 
-        serie1.remove(0);
-        serie2.remove(0);
-
-        for (String element : serie1){
-
-            serie1Number.add(Double.parseDouble(element));
-        }
-
-        Collections.sort(serie1Number);
-        for(Double element : serie1Number){
-            System.out.println(element);
-        }
-        System.out.println(Collections.max(serie1));
-
+    } catch (FileNotFoundException e) {
+        System.err.println("Reading file failed: " + e.getMessage());
     }
+
+    serie1.remove(0);
+    serie2.remove(0);
+
+    for (String element : serie1){
+
+        serie1Number.add(Double.parseDouble(element));
+    }
+
+    Collections.sort(serie1Number);
+
+    for(Double element : serie1Number){
+        //System.out.println(element);
+    }
+    System.out.println(getMax(serie1Number));
+
+}
+
+
+
+    public static Double getMax(List<Double> test)
+    {
+        Double maxValue;
+
+        maxValue=Collections.max(test);
+
+        return maxValue;
+    }
+
+
+
+
+
+
+
 
 
 }
