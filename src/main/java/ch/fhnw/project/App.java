@@ -43,45 +43,32 @@ public final class App extends Application {
 
         FlowPane pane = new FlowPane();
 
-        FileChooser fc = new FileChooser();
-
-        List<String> listTest =new ArrayList<>();
-        List<String> listTestx =new ArrayList<>();
-        List<String> listTesty =new ArrayList<>();
-
-        XYChart.Series series1 = new XYChart.Series();
-
-
         FileChooser filefc = new FileChooser();
 
-        List<String> toList = new ArrayList<>();
         List<String> serie1 = new ArrayList<>();
         List<String> serie2 = new ArrayList<>();
         List<Double> serie1Number = new ArrayList<>();
         List<Double> serie2Number = new ArrayList<>();
 
+        String name1, name2;
+
+
+        XYChart.Series series1 = new XYChart.Series();
         List<Double> list = new ArrayList<>();
 
 
+
         File file = filefc.showOpenDialog(stage);
+        ChooseData(serie1, serie2, file);
 
 
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNext()) {
-                scanner.useDelimiter("\t|\n");
 
-
-                serie1.add(scanner.next());
-                serie2.add(scanner.next());
-
-            }
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Reading file failed: " + e.getMessage());
-        }
-
+        name1 = serie1.get(0);
+        name2 = serie2.get(0);
         serie1.remove(0);
         serie2.remove(0);
+
+        System.out.print(name1);
 
         for (String element : serie1){
 
@@ -89,34 +76,17 @@ public final class App extends Application {
         }
 
         Collections.sort(serie1Number);
+        Collections.sort(serie2Number);
 
-        for(Double element : serie1Number){
-            //System.out.println(element);
-        }
-        //System.out.println(getMax(serie1Number));
-       /* File file = fc.showOpenDialog(stage);
-
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNext()) {
-                listTest.add(scanner.next());
-                //System.out.println(scanner.next());
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("Reading file failed: " + e.getMessage());
-        }*/
-
-
-
-
+        Double maxValue = Collections.max(serie1Number);
 
 
         //actions
         bt1.setOnAction(actionEvent ->
         {
             pane.setStyle("-fx-background-color: lightblue");
-            //Test FileChooser!
 
-            System.out.print(DataRead.getMax())
+            System.out.print(getMax(serie1Number));
 
 
         });
@@ -132,6 +102,32 @@ public final class App extends Application {
         stage.setScene(scence);
         stage.show();
 
+    }
+
+    private void ChooseData(List<String> serie1, List<String> serie2, File file) {
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNext()) {
+                scanner.useDelimiter("\t|\n");
+
+
+                serie1.add(scanner.next());
+                serie2.add(scanner.next());
+
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Reading file failed: " + e.getMessage());
+        }
+    }
+
+
+    private  Double getMax(List<Double> test)
+    {
+        Double maxValue;
+
+        maxValue=Collections.max(test);
+
+        return maxValue;
     }
 
 }
