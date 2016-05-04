@@ -8,9 +8,10 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -43,7 +44,7 @@ public final class App extends Application {
         List<Double> serie1Number = new ArrayList<>();
         List<Double> serie2Number = new ArrayList<>();
 
-        XYChart.Series series1 = new XYChart.Series();
+        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
 
         String name1, name2;
 
@@ -60,6 +61,8 @@ public final class App extends Application {
         serie2.remove(0);
 
 
+
+
         for (String element : serie1){
 
             serie1Number.add(Double.parseDouble(element));
@@ -69,13 +72,15 @@ public final class App extends Application {
 
             serie2Number.add(Double.parseDouble(element));
         }
-        NumberAxis xAxis = new NumberAxis(getMin(serie1Number),getMax(serie1Number),0);
-        NumberAxis yAxis = new NumberAxis(getMin(serie2Number),getMax(serie2Number),0);
+        NumberAxis xAxis = new NumberAxis(/*getMin(serie1Number),getMax(serie1Number),0*/);
+        NumberAxis yAxis = new NumberAxis(/*getMin(serie2Number),getMax(serie2Number),0*/);
+
+        xAxis.setForceZeroInRange(false);
 
 
         Double maxValue = Collections.max(serie1Number);
         final ScatterChart<Number,Number> sc =
-                new ScatterChart<Number,Number>(xAxis,yAxis);
+                new ScatterChart<>(xAxis, yAxis);
 
 
 
@@ -92,18 +97,21 @@ public final class App extends Application {
             int count =0;
             while ( count < serie1Number.size()) {
 
-                series1.getData().add(new ScatterChart.Data<Number, Number>(serie1Number.get(count), serie2Number.get(count)));
+                XYChart.Data<Number, Number> point = new ScatterChart.Data<>(serie1Number.get(count), serie2Number.get(count));
+
+                Circle circle = new Circle();
+                circle.setFill(Color.BLUE);
+                circle.setRadius(15);
+                point.setNode(circle);
+                series1.getData().add(point);
                 count++;
-
-
-            }
-            for (Double element : serie1Number){
-
             }
 
         });
+        sc.setLegendVisible(false);
 
-        sc.getData().addAll(series1);
+        sc.getData().add(series1);
+
 
         sc.setPrefSize(500, 500);
 
