@@ -1,5 +1,6 @@
-package ch.fhnw.project;
-
+package ch.fhnw.project;/**
+ * Created by FelixYeung on 05.05.16.
+ */
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -15,21 +16,20 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
+public class testClass2FX extends Application {
 
-public class App extends Application {
-
-    private final File file1 = null;
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage stage) {
-
-
 
         //Init Buttons
         Button bt1 = new Button("button1");
@@ -47,15 +47,37 @@ public class App extends Application {
         List<Double> serie2Number = new ArrayList<>();
 
         FileChooser filefc = new FileChooser();
+        //File file=  filefc.showOpenDialog(stage);
 
-        DataRead data = new DataRead(filefc.showOpenDialog(stage));
-
+        testClass test = new testClass(filefc.showOpenDialog(stage));
 
         XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
 
         String name1, name2;
 
-        getAxis(serie1, serie2, data);
+        for (String element : test.getSerie(4))
+        {
+            System.out.println(element);
+        }
+      /*  try (Scanner scanner = new Scanner(test.getFile())) {
+
+            while (scanner.hasNext()) {
+                scanner.useDelimiter("\t|\n");
+
+                serie1.add(scanner.next());
+                serie2.add(scanner.next());
+            }
+
+        } catch (FileNotFoundException e) {
+            //System.err.println("Reading file failed: " + e.getMessage());
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Reading failed");
+            alert.setHeaderText("Look, a Warning Dialog");
+            alert.setContentText("Please try again!");
+
+            alert.showAndWait();
+        }*/
 
         name1 = serie1.get(0);
         name2 = serie2.get(0);
@@ -120,8 +142,20 @@ public class App extends Application {
         stage.show();
     }
 
-    private void getAxis(List<String> serie1, List<String> serie2, DataRead data) {
-        try (Scanner scanner = new Scanner(data.getFile())) {
+
+
+
+
+
+    private void scatterSetting(XYChart.Series<Number, Number> series1, ScatterChart<Number, Number> sc) {
+        sc.setLegendVisible(false);
+        sc.getData().add(series1);
+        sc.setPrefSize(500, 500);
+    }
+
+
+    private void ChooseData(List<String> serie1, List<String> serie2, File file) {
+        try (Scanner scanner = new Scanner(file)) {
 
             while (scanner.hasNext()) {
                 scanner.useDelimiter("\t|\n");
@@ -142,12 +176,4 @@ public class App extends Application {
         }
     }
 
-
-    private void scatterSetting(XYChart.Series<Number, Number> series1, ScatterChart<Number, Number> sc) {
-        sc.setLegendVisible(false);
-        sc.getData().add(series1);
-        sc.setPrefSize(500, 500);
-    }
-
 }
-
