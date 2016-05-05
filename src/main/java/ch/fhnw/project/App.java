@@ -8,7 +8,6 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -16,7 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
-import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.List;
 
 public class App extends Application {
 
-    private final File file1 = null;
 
     @Override
     public void start(Stage stage) {
@@ -36,7 +34,6 @@ public class App extends Application {
 
 
         //Init Labels
-        Label la1 = new Label("label1");
 
         FlowPane pane = new FlowPane();
 
@@ -48,7 +45,7 @@ public class App extends Application {
 
         FileChooser filefc = new FileChooser();
 
-        DataRead data = new DataRead(filefc.showOpenDialog(stage));
+        DataRead data = new DataRead(filefc.showOpenDialog(stage));     // Data as object
 
 
         XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
@@ -62,7 +59,10 @@ public class App extends Application {
         serie1.remove(0);
         serie2.remove(0);
 
-
+        for(String element: data.getList())
+        {
+            System.out.print(element);
+        }
 
 
         for (String element : serie1){
@@ -105,6 +105,8 @@ public class App extends Application {
                 series1.getData().add(point);
                 count++;
             }
+
+
 
         });
 
