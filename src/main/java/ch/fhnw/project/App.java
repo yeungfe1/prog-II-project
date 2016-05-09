@@ -1,13 +1,19 @@
 package ch.fhnw.project;
 
 
+import com.sun.glass.ui.Window;
+import com.sun.javafx.scene.control.skin.CustomColorDialog;
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -31,6 +37,15 @@ public class App extends Application {
 
         //Init Buttons
         Button bt1 = new Button("button1");
+        Button bt2 = new Button("Color");
+
+        final ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setValue(Color.CORAL);
+
+
+        Slider sl1 = new Slider(1, 10,0);
+
+
 
 
         //Init Labels
@@ -59,10 +74,6 @@ public class App extends Application {
         serie1.remove(0);
         serie2.remove(0);
 
-        for(String element: data.getList())
-        {
-            System.out.print(element);
-        }
 
 
         for (String element : serie1){
@@ -90,30 +101,47 @@ public class App extends Application {
 
             //  System.out.print(getMax(serie1Number));
 
-            xAxis.setLabel(name1);
-            yAxis.setLabel(name2);
 
-            int count =0;
-            while ( count < serie1Number.size()) {
 
-                XYChart.Data<Number, Number> point = new ScatterChart.Data<>(serie1Number.get(count), serie2Number.get(count));
+            });
 
-                Circle circle = new Circle();
-                circle.setFill(Color.BLUE);
-                circle.setRadius(4);
-                point.setNode(circle);
-                series1.getData().add(point);
-                count++;
+        xAxis.setLabel(name1);
+        yAxis.setLabel(name2);
+
+        int count =0;
+        while ( count < serie1Number.size()) {
+
+            XYChart.Data<Number, Number> point = new ScatterChart.Data<>(serie1Number.get(count), serie2Number.get(count));
+
+            Circle circle = new Circle();
+            circle.setFill(Color.BLUE);
+            circle.setRadius(4);
+            point.setNode(circle);
+            series1.getData().add(point);
+            count++;
+
+            sl1.valueProperty().addListener((observableValue, oldValue, newValue) ->
+            {
+                circle.setRadius(sl1.getValue());
+            });
+        }
+
+
+/*
+
+        colorPicker.setOnAction(new EventHandler() {
+            public void handle(Event t) {
+                circle.setFill(colorPicker.getValue());
             }
-
-
-
         });
+*/
+
+
 
 
         scatterSetting(series1, sc);
 
-        pane.getChildren().addAll(bt1, /*la1,*/sc);
+        pane.getChildren().addAll(bt1, /*la1,*/sc, sl1,colorPicker);
 
         Scene scence = new Scene(pane, 800, 800);
 
