@@ -2,7 +2,7 @@ package ch.fhnw.project;
 
 
 
-import ch.fhnw.project.datenmodell.TabDelimitedFormat;
+import ch.fhnw.project.datenmodell.TabDelimited;
 import javafx.application.Application;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -10,24 +10,28 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 
 
-public class App extends Application {
+public class App extends Application{
 
 
     @Override
     public void start(Stage stage)  {
 
+
+
         FileChooser filechooser = new FileChooser();
         File file = filechooser.showOpenDialog(stage);
 
 
-        TabDelimitedFormat data = new TabDelimitedFormat(file);
+        TabDelimited data = new TabDelimited(file);
 
-        try {
+        try {/*
             for (String s : data.getVarNameList()) {
                 System.out.print(s);
-            }
+            }*/
+            System.out.print(Collections.max(data.getVarValue()));
 
 
         } catch (FileNotFoundException e) {

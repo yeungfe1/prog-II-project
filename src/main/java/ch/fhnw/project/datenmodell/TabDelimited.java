@@ -9,12 +9,12 @@ import java.util.Scanner;
 /**
  * Created by FelixYeung on 11.05.16.
  */
-public class TabDelimitedFormat implements datenFuerDatenmodell {
+public class TabDelimited implements datenFuerDatenmodell {
 
     final File file;
 
 
-    public TabDelimitedFormat(File file) {
+    public TabDelimited(File file) {
         this.file = file;
     }
 
@@ -76,6 +76,23 @@ public class TabDelimitedFormat implements datenFuerDatenmodell {
             list.add(scanner.next());
         }
         return list;
+    }
+
+    public List<Double> getVarValue() throws FileNotFoundException {
+        List<Double> doubleList = new ArrayList<>();
+        List<String> stringList = new ArrayList<>(getListString());
+        int removeVar=0;
+
+
+      while (getVarNumber()> removeVar){
+          stringList.remove(0);
+          removeVar++;
+      }
+
+        for (String element : stringList) {
+            doubleList.add(Double.valueOf(element));
+        }
+        return doubleList;
     }
 
 
