@@ -1,4 +1,4 @@
-package ch.fhnw.project;/**
+package ch.fhnw.project.test1withoutgui;/**
  * Created by FelixYeung on 05.05.16.
  */
 
