@@ -33,23 +33,21 @@ public class testClass2FX extends Application {
 
         HashMap <String,ArrayList> mapTest = new HashMap<>();
 
-
         testClass data = new testClass(fileChooser.showOpenDialog(stage));
 
-        System.out.print(data.getVarnum());
+
+        /*System.out.println("Anzahl Variabel: " + data.getVarNum());
+        System.out.print("mapübergabegrösse: " + data.getMap().size());
+*/
+        data.testtest();
+
       /* for(String element : data.getMap().values().iterator())
         {
             System.out.print(element);
         }*/
        // System.out.print(data.getMap().get(0));  geht nicht
 
-
-
-
-
         //data.countVar();
-
-
 
         pane.getChildren().addAll();
 

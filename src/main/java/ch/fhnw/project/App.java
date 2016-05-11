@@ -101,8 +101,6 @@ public class App extends Application {
 
             //  System.out.print(getMax(serie1Number));
 
-
-
             });
 
         xAxis.setLabel(name1);

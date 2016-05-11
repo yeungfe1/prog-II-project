@@ -16,33 +16,31 @@ public class testClass {
         this.file = file;
     }
 
+
+
     private File getFile(){
         return file;
     }
 
 
-    public int getVarnum() {
+    public int getVarNum() {
         int anzahl = 0;
-        String bb;
+        String string;
         int n =0;
-
 
         try {
             Scanner scanner1 = new Scanner(getFile());
 
-            bb = scanner1.nextLine();
+            string = scanner1.nextLine();
 
+            while(n<string.length()){
 
-            while(n<bb.length()){
-
-                if (bb.charAt(n)== '\t')
+                if (string.charAt(n)== '\t')
                 {
                     anzahl++;
                 }
                 n++;
             }
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -52,10 +50,10 @@ public class testClass {
 
     public List<String> getList(){
         int n = 0;
-        int b = getVarnum();          //for Variable
+        int variable = getVarNum();          //for Variable
         HashMap<String,ArrayList<String>> map = new HashMap<String,ArrayList<String>>();
 
-        for(int i=0; i<b; i++) map.put("myList"+i,new ArrayList<String>());
+        for(int i=0; i<variable; i++) map.put("myList"+i,new ArrayList<String>());
         //List<String> serie = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(getFile())) {
@@ -63,7 +61,7 @@ public class testClass {
             while (scanner.hasNext()) {
                 scanner.useDelimiter("\t|\n");
 
-                while (n < b){
+                while (n < variable){
                     map.get("myList" + n).add(scanner.next());
                 //serie.add(scanner.next());
                     n++;
@@ -88,11 +86,12 @@ public class testClass {
 
     public HashMap<String,ArrayList<String>> getMap(){
         int n = 0;
-        int b = getVarnum();          //for Variable
+        int b = getVarNum();          //for Variable
         HashMap<String,ArrayList<String>> map = new HashMap<String,ArrayList<String>>();
 
         for(int i=0; i<b; i++) map.put("myList"+i,new ArrayList<String>());
         //List<String> serie = new ArrayList<>();
+
 
         try (Scanner scanner = new Scanner(getFile())) {
 
@@ -120,4 +119,34 @@ public class testClass {
         }
         return map;
     }
+
+    public void testtest(){
+
+        List<String> list = new ArrayList<>();
+
+        try {
+            Scanner scanner = new Scanner(getFile());
+
+            while(scanner.hasNext())
+            {
+                scanner.useDelimiter("\n");
+
+                list.add(scanner.nextLine());
+
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        for (String s : list) {
+            System.out.println(s);
+        }
+
+
+    }
+
 }
