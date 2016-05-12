@@ -10,6 +10,9 @@ import java.util.List;
 public interface IdatenFuerDatenmodell {
 
     void getFile1(File file);
+
+
+
     List<String> getVarNameList () throws FileNotFoundException;
 
 }

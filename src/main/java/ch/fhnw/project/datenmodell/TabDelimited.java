@@ -15,7 +15,7 @@ public class TabDelimited extends App implements IdatenFuerDatenmodell{
     File file;
 
 
-    @Override
+    @Override       // von Interface
     public void getFile1(File file) {
         this.file=file;
 

@@ -3,6 +3,7 @@ package ch.fhnw.project;
 
 
 import ch.fhnw.project.datenmodell.IdatenFuerDatenmodell;
+import ch.fhnw.project.datenmodell.LineOriented;
 import ch.fhnw.project.datenmodell.TabDelimited;
 import javafx.application.Application;
 import javafx.stage.FileChooser;
@@ -24,11 +25,12 @@ public class App extends Application {
         FileChooser filechooser = new FileChooser();
         File file = filechooser.showOpenDialog(stage);
 
-        IdatenFuerDatenmodell l = new TabDelimited(file);
+        IdatenFuerDatenmodell l = new LineOriented(file);
+        IdatenFuerDatenmodell l1 = new TabDelimited(file);
 
 
         try {
-            for (String s : l.getVarNameList()) {
+            for (String s : l1.getVarNameList()) {
                 System.out.print(s);
             }
         } catch (FileNotFoundException e) {
