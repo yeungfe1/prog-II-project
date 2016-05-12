@@ -1,5 +1,7 @@
 package ch.fhnw.project.datenmodell;
 
+import ch.fhnw.project.App;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,16 +11,24 @@ import java.util.Scanner;
 /**
  * Created by FelixYeung on 11.05.16.
  */
-public class TabDelimited implements datenFuerDatenmodell {
+public class TabDelimited extends App implements IdatenFuerDatenmodell{
+    File file;
 
-    final File file;
+
+    @Override
+    public void getFile1(File file) {
+        this.file=file;
+
+    }
+
+
 
 
     public TabDelimited(File file) {
         this.file = file;
     }
 
-    public File getFile() {
+   public File getFile() {
         return file;
     }
 
@@ -94,6 +104,7 @@ public class TabDelimited implements datenFuerDatenmodell {
         }
         return doubleList;
     }
+
 
 
 }

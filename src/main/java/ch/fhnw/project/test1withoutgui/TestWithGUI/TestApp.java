@@ -1,11 +1,8 @@
 package ch.fhnw.project;
 
 
-import com.sun.glass.ui.Window;
-import com.sun.javafx.scene.control.skin.CustomColorDialog;
+import ch.fhnw.project.test1withoutgui.DataRead;
 import javafx.application.Application;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
