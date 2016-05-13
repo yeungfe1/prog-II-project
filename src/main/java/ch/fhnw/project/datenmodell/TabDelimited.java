@@ -16,11 +16,10 @@ public class TabDelimited extends App implements IdatenFuerDatenmodell{
 
 
     @Override       // von Interface
-    public void getFile1(File file) {
+    public void IgetFile(File file) {
         this.file=file;
 
     }
-
 
 
 
@@ -28,7 +27,7 @@ public class TabDelimited extends App implements IdatenFuerDatenmodell{
         this.file = file;
     }
 
-   public File getFile() {
+    public File getFile() {
         return file;
     }
 
