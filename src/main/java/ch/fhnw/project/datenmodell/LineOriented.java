@@ -24,11 +24,11 @@ public class LineOriented implements IdatenFuerDatenmodell{
     }
 
 
-    @Override
+    /*@Override
     public void IgetFile(File file) {
         this.file = file;
     }
-
+*/
     @Override
     public int getVarNumber() throws FileNotFoundException {
         Scanner scanner = new Scanner(getFile());

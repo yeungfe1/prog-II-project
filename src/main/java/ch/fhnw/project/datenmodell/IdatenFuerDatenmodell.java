@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface IdatenFuerDatenmodell {
 
-    void IgetFile(File file);
+    //void IgetFile(File file);
 
     int getVarNumber() throws FileNotFoundException;
 
