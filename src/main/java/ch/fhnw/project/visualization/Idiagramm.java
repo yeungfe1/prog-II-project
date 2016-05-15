@@ -9,6 +9,7 @@ import java.util.List;
 public interface Idiagramm {
 
 
+
     String getXName();
 
     String getYName();

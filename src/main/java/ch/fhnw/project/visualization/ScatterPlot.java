@@ -19,9 +19,11 @@ public class ScatterPlot implements Idiagramm{
     }
 
 
+    private List<String> getList(){return liste;}
     @Override
     public String getXName() {
-        return null;
+       String name = getList().get(0);
+        return name;
     }
 
     @Override

@@ -32,11 +32,6 @@ public class TabDelimited extends App implements IdatenFuerDatenmodell{
     }
 
 
-    public String getName() throws FileNotFoundException {
-        return getListString().get(0);
-
-    }
-
     public int getVarNumber() {
         int number = 0;
         String firstLine;
@@ -75,17 +70,7 @@ public class TabDelimited extends App implements IdatenFuerDatenmodell{
         return varListName;
     }
 
-    public List<String> getListString() throws FileNotFoundException {
-        Scanner scanner = new Scanner(getFile());
-
-        List<String> list = new ArrayList<>();
-
-        while (scanner.hasNext()) {
-            scanner.useDelimiter("\t|\n");
-            list.add(scanner.next());
-        }
-        return list;
-    }
+    //-------------------------------
 
     public List<Double> getVarValue() throws FileNotFoundException {
         List<Double> doubleList = new ArrayList<>();
@@ -104,8 +89,24 @@ public class TabDelimited extends App implements IdatenFuerDatenmodell{
         return doubleList;
     }
 
+    public String getName() throws FileNotFoundException {
+        return getListString().get(0);
 
+    }
 
+    public List<String> getListString() throws FileNotFoundException {
+        Scanner scanner = new Scanner(getFile());
+
+        List<String> list = new ArrayList<>();
+
+        while (scanner.hasNext()) {
+            scanner.useDelimiter("\t|\n");
+            list.add(scanner.next());
+        }
+
+        list.add(0, String.valueOf(getVarNumber()));
+        return list;
+    }
 }
 
 

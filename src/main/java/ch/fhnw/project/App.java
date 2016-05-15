@@ -5,6 +5,8 @@ package ch.fhnw.project;
 import ch.fhnw.project.datenmodell.IdatenFuerDatenmodell;
 import ch.fhnw.project.datenmodell.LineOriented;
 import ch.fhnw.project.datenmodell.TabDelimited;
+import ch.fhnw.project.visualization.Idiagramm;
+import ch.fhnw.project.visualization.ScatterPlot;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,6 +35,9 @@ public class App extends Application {
         File file = filechooser.showOpenDialog(stage);
         String fileNameFormat = file.getAbsolutePath();
 
+
+
+
         List<String> listGesamt = new ArrayList<>();
         List<String> listXAxisValue = new ArrayList<>();
         List<String> listYAxisValue = new ArrayList<>();
@@ -49,6 +54,12 @@ public class App extends Application {
             for (String s : getListVonModell(file)) {
                 System.out.println(s);
             }
+
+            Idiagramm test2 = new ScatterPlot(getListVonModell(file));
+
+           // System.out.print(test2.getXName());
+
+
 
 
 
@@ -70,7 +81,7 @@ public class App extends Application {
 
 
 
-    private List<String> getListVonModell(File file) throws FileNotFoundException {
+    public List<String> getListVonModell(File file) throws FileNotFoundException {
         String fileNameFormat= file.getAbsolutePath();
         List<String> list = new ArrayList<>();
         if(fileNameFormat.endsWith(".txt"))

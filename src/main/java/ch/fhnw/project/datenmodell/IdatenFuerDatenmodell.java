@@ -11,10 +11,13 @@ public interface IdatenFuerDatenmodell {
 
     //void IgetFile(File file);
 
+    List<String> getListString() throws FileNotFoundException;
+
+
     int getVarNumber() throws FileNotFoundException;
 
-    List<String> getListString() throws FileNotFoundException;
 /*
+
     String getName() throws FileNotFoundException;
 
     List<Double> getVarValue() throws FileNotFoundException;
