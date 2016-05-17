@@ -4,6 +4,8 @@ import ch.fhnw.project.datenmodell.*;
 
 import ch.fhnw.project.datenmodell.LineOriented;
 
+import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
 /**
@@ -20,24 +22,80 @@ public class ScatterPlot implements Idiagramm{
 
 
     private List<String> getList(){return liste;}
+
+
+
+    private int getNumberOfVariable(){
+        return Integer.parseInt(getList().get(0));
+    }
+
+
+    private List<String> getListofName(){
+        List<String> list = new ArrayList<>();
+        for(int i = 0; i<getNumberOfVariable();i++){
+            list.add(getList().get(i+1));
+        }
+        return list;
+    }
+
+    private List<Double> getListInDouble(){
+        List<String> list = new ArrayList<>();
+        List<Double> listToDouble = new ArrayList<>();
+
+        for (String s : getList()) {
+            list.add(s);
+        }
+
+        for(int i=0; i<=getNumberOfVariable();i++){
+            list.remove(0);
+        }
+
+        for (String s : list) {
+            listToDouble.add(Double.parseDouble(s));
+        }
+
+        return listToDouble;
+    }
+
+
+
     @Override
-    public String getXName() {
-       String name = getList().get(0);
-        return name;
+    public String  getXName(int number) {
+
+        return getListofName().get(number);
     }
 
     @Override
-    public String getYName() {
-        return null;
+    public String getYName(int number) {
+        return getListofName().get(number);
     }
 
     @Override
-    public List<Double> getXAxis() {
-        return null;
+    public List<Double> getXAxis(int number) {
+        List<Double> listDouble = new ArrayList<>();
+
+        for (int i =0;i<getListInDouble().size();i++) {
+
+            if(i==number){
+                listDouble.add(getListInDouble().get(i));
+                number=number+getNumberOfVariable();
+            }
+        }
+        return listDouble;
     }
 
     @Override
-    public List<Double> getYAxis() {
-        return null;
+    public List<Double> getYAxis(int number) {
+        List<Double> listDouble = new ArrayList<>();
+
+        for (int i = 0; i < getListInDouble().size(); i++) {
+
+            if (i == number) {
+                listDouble.add(getListInDouble().get(i));
+                number = number + getNumberOfVariable();
+            }
+        }
+        return listDouble;
     }
+
 }

@@ -44,7 +44,9 @@ public class LineOriented implements IdatenFuerDatenmodell{
         List<String> fileToList = new ArrayList<>();
         List<String> separatedList = new ArrayList<>();
 
-
+    /*    while(scanner1.hasNextLine()){
+            scanner1.useDelimiter()
+        }*/
 
         while (scanner.hasNextLine()){
             scanner.useDelimiter(";|\n");

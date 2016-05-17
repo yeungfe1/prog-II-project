@@ -10,11 +10,11 @@ public interface Idiagramm {
 
 
 
-    String getXName();
+    String  getXName(int number);
 
-    String getYName();
+    String getYName(int number);
 
-    List<Double> getXAxis();
+    List<Double> getXAxis(int number);
 
-    List<Double> getYAxis();
+    List<Double> getYAxis(int number);
 }
