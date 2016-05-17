@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by FelixYeung on 11.05.16.
  */
-public class Histogram extends App{
+public class Histogram {
 
 
 

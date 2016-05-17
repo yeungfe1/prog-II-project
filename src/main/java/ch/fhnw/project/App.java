@@ -8,6 +8,8 @@ import ch.fhnw.project.datenmodell.TabDelimited;
 import ch.fhnw.project.visualization.Idiagramm;
 import ch.fhnw.project.visualization.ScatterPlot;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
@@ -28,8 +30,8 @@ public class App extends Application {
 
 
     private Stage stage;
-
-
+    public static final int X = 0;
+    public static final int Y = 1;
 
     @Override
     public void start(Stage stage)  {
@@ -50,49 +52,30 @@ public class App extends Application {
 
         FlowPane pane = new FlowPane();
         NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("x");
+
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("y");
+
         //Now Create an instance of the scatterChart using both of axis
         ScatterChart scatterChart=new ScatterChart(xAxis,yAxis);
         scatterChart.setLegendVisible(false);
 
-
         XYChart.Series data=new XYChart.Series();
-        data.setName("CAR");
+
+
+
         try {
+            Idiagramm test2 = new ScatterPlot(getListVonModell(file));
+            xAxis.setLabel(test2.getXName(X));
+            xAxis.setForceZeroInRange(false);
+            yAxis.setLabel(test2.getYName(Y));
 
-            data.getData().add(new XYChart.Data(1,12));
-            data.getData().add(new XYChart.Data(2,10));
-            data.getData().add(new XYChart.Data(3,9.2));
-            data.getData().add(new XYChart.Data(4,8.6));
-            data.getData().add(new XYChart.Data(5,8));
-            data.getData().add(new XYChart.Data(6,7));
-            data.getData().add(new XYChart.Data(7,6));
-            data.getData().add(new XYChart.Data(8,5));
+            scatterChart.setData(getChartData(file,X,Y));
 
 
-            scatterChart.getData().addAll(data);
-
-
-
-
-
-            // Now Here we create a series of data using the XYChart.Series Class
-
-
-           // getListVonModell(file);
-
-         /*   for (String s : getListVonModell(file)) {
-                System.out.println(s);
-            }
-         */   Idiagramm test2 = new ScatterPlot(getListVonModell(file));
-
-            for (  Double s : test2.getXAxis(1)) {
+            for (  Double s : test2.getXAxis(4)) {
                 System.out.println(s);
             }
 
-           // System.out.print(test2.getXName());
 
 
 
@@ -113,6 +96,27 @@ public class App extends Application {
         }
 
 
+    private ObservableList<XYChart.Series<Double, Double>> getChartData(File file, int xValue, int yValue) throws FileNotFoundException {
+        Idiagramm test1 = new ScatterPlot(getListVonModell(file));
+        List<Double> listXValue = new ArrayList<>();
+        List<Double> listYValue = new ArrayList<>();
+        for (Double aDouble : test1.getXAxis(xValue)) {
+            listXValue.add(aDouble);
+        }
+        for (Double aDouble : test1.getYAxis(yValue)) {
+            listYValue.add(aDouble);
+        }
+        ObservableList<XYChart.Series<Double, Double>> answer = FXCollections.observableArrayList();
+        XYChart.Series<Double, Double> aSeries = new XYChart.Series<Double, Double>();
+
+        aSeries.setName("here name of Axis");
+
+        for (int i = 0; i < test1.getXAxis(0).size(); i++) {
+            aSeries.getData().add(new XYChart.Data(listXValue.get(i),listYValue.get(i)));
+        }
+        answer.addAll(aSeries);
+        return answer;
+    }
 
 
 
@@ -138,7 +142,7 @@ public class App extends Application {
         return list;
     }
 
-        //IdatenFuerDatenmodell l = new TabDelimited(stage);
+
 
 
 }
