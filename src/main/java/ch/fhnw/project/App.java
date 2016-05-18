@@ -64,21 +64,17 @@ public class App extends Application {
 
 
         try {
-            Idiagramm test2 = new ScatterPlot(getListVonModell(file));
-            xAxis.setLabel(test2.getXName(X));
+            Idiagramm scatterPlot = new ScatterPlot(getListVonModell(file));
+            xAxis.setLabel(scatterPlot.getXName(X));
             xAxis.setForceZeroInRange(false);
-            yAxis.setLabel(test2.getYName(Y));
+            yAxis.setLabel(scatterPlot.getYName(Y));
 
             scatterChart.setData(getChartData(file,X,Y));
 
 
-            for (  Double s : test2.getXAxis(4)) {
+            for (  Double s : scatterPlot.getXAxis(X)) {
                 System.out.println(s);
             }
-
-
-
-
 
 
         } catch (FileNotFoundException e) {
@@ -97,21 +93,28 @@ public class App extends Application {
 
 
     private ObservableList<XYChart.Series<Double, Double>> getChartData(File file, int xValue, int yValue) throws FileNotFoundException {
-        Idiagramm test1 = new ScatterPlot(getListVonModell(file));
+
+        Idiagramm scatterPlot = new ScatterPlot(getListVonModell(file));
+
         List<Double> listXValue = new ArrayList<>();
         List<Double> listYValue = new ArrayList<>();
-        for (Double aDouble : test1.getXAxis(xValue)) {
+
+
+        for (Double aDouble : scatterPlot.getXAxis(xValue)) {
             listXValue.add(aDouble);
         }
-        for (Double aDouble : test1.getYAxis(yValue)) {
+        for (Double aDouble : scatterPlot.getYAxis(yValue)) {
             listYValue.add(aDouble);
         }
+
+
+
         ObservableList<XYChart.Series<Double, Double>> answer = FXCollections.observableArrayList();
         XYChart.Series<Double, Double> aSeries = new XYChart.Series<Double, Double>();
 
         aSeries.setName("here name of Axis");
 
-        for (int i = 0; i < test1.getXAxis(0).size(); i++) {
+        for (int i = 0; i < scatterPlot.getXAxis(0).size(); i++) {
             aSeries.getData().add(new XYChart.Data(listXValue.get(i),listYValue.get(i)));
         }
         answer.addAll(aSeries);
