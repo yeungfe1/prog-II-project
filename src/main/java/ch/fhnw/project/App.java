@@ -1,40 +1,46 @@
 package ch.fhnw.project;
 
-import ch.fhnw.project.datenmodell.DataModel;
+import ch.fhnw.project.datamodel.Variable;
+import ch.fhnw.project.gui.HistogramChart;
 import ch.fhnw.project.io.*;
-import com.sun.tools.internal.xjc.generator.util.WhitespaceNormalizer;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
-import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.event.ActionEvent;
 
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.sql.SQLClientInfoException;
+import java.io.*;
 import java.util.*;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addComponentListener;
-import static java.lang.StrictMath.ceil;
 
-public class App extends Application {
+public class App extends Application{
+
+    StackPane pane;
+
+    List<Variable> lstData = new ArrayList<>();
+    List<Variable> lstInput = new ArrayList<>();
+
+    Button btnLoadFile = new Button("Import data");
+
+    Label labelXAxis = new Label("xAxis: ");
+    Label labelYAxis = new Label("yAxis: ");
+    Scene scene;
+
+    Stage activeStage;
+    Slider slider = new Slider(0,15,5);
+
+    ColorPicker colorPicker = new ColorPicker(Color.BLUE);
 
     NumberAxis scxAxis = new NumberAxis();
     NumberAxis scyAxis = new NumberAxis();
@@ -43,22 +49,101 @@ public class App extends Application {
     NumberAxis lineyAxis = new NumberAxis();
 
     StackPane root = new StackPane();
+
     LineChart<Number, Number> lineChart ;
+    ScatterChart<Number, Number> sc;
+
+    ComboBox cb = new ComboBox();
+    ComboBox cb2 = new ComboBox();
+
+    Alert alert = new Alert(Alert.AlertType.WARNING);
+
+    File file;
+
+    FileChooser fileChooser = new FileChooser();
+
     @Override
-    public void start(Stage stage) {
-        StackPane pane = new StackPane();
+    public void start(Stage stage)  {
+        this.activeStage = stage;
+        btnLoadFile.setOnAction(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(final ActionEvent e) {
+                        try {
+                            file = fileChooser.showOpenDialog(activeStage);
+                            if (file != null) {
+                                activeStage.close();
+                                Stage newStage = new Stage();
+                                newStage.setTitle("New Stage");
+                                activeStage = newStage;
+                                loadDataFromFile(file, newStage);
+                            }
+                        }
+                        catch(Exception e1){
+                            alertWarningFatalError();
+                            stage.close();
+                        }
+                    }
+                });
 
-        FileChooser filechooser = new FileChooser();
-        File file = filechooser.showOpenDialog(stage);
-        //File file = new File("bin/helvetia.txt");
-        //	File file = new File("bin/temperatur-basel-all.txt");
 
-        FileParser fp;
         try {
+            file = fileChooser.showOpenDialog(stage);
+            loadDataFromFile(file, stage);
+        }
+        catch(Exception e){
+            alertWarning();
+            try{
+                file = fileChooser.showOpenDialog(stage);
+                loadDataFromFile(file, stage);
+            }catch (Exception e2){
+                alertWarningFatalError();
+                stage.close();
+            }
 
-            fp = getData(file);
-            fp.readData(file);
+        }
+    }
+
+
+    private void refreshData(String t){
+        scxAxis.setLabel(t);
+        linexAxis.setLabel(t);
+
+        sc.getData().removeAll();
+        lineChart.getData().removeAll();
+        sc.getData().clear();
+        lineChart.getData().clear();
+        try{
+            List<Variable> newList = new ArrayList<Variable>();
+            if(lstData.size() > 0) {
+                newList.add(lstData.get(cb.getSelectionModel().getSelectedIndex()));
+                newList.add(lstData.get(cb2.getSelectionModel().getSelectedIndex()));
+
+                sc.getData().addAll(createChartData(newList));
+                lineChart.getData().add(createChartData(newList));
+            }
+        }catch(Exception e){
+
+        }
+    }
+
+    public void loadDataFromFile(File file, Stage stage){
+
+        cb.getItems().removeAll(cb.getItems());
+        cb2.getItems().removeAll(cb2.getItems());
+
+        try {
+            FileParser fp;
+            fp = makeObject(file);
+
+            lstInput = fp.readData(file);
+
             Label label;
+
+
+            HistogramChart hi1 = new HistogramChart(lstInput);
+            HistogramChart hi2 = new HistogramChart(lstInput);
+
 
             if(file.exists()){
                 label = new Label("Found");
@@ -66,237 +151,190 @@ public class App extends Application {
             else {
                 label = new Label("NA");
             }
-
-
-
             CheckBox checkbox = new CheckBox("Line");
             checkbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                     lineChart.setVisible(newValue);
-
                     root.requestLayout();
                 }
             });
 
 
-            ChoiceBox cb = new ChoiceBox();
-            cb.setItems(FXCollections.observableArrayList(
-                    "1","2","3","4")
-            );
+            for (Variable model : lstInput) {
 
-            ChoiceBox cb2 = new ChoiceBox();
-            cb2.setItems(FXCollections.observableArrayList(
-                    "1", "2 ", "3", "4")
-            );
+                cb.getItems().add(model.getName());
+                cb2.getItems().add(model.getName());
 
+            }
 
+            cb.getSelectionModel().select(0);
+            cb2.getSelectionModel().select(1);
+            cb.setDisable(true);
+            cb2.setDisable(true);
+            cb.valueProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue observableValue, String t, String t2) {
+                    if(t2 != null){
+                        refreshData(t2);
+                        hi1.collectionAll(cb.getSelectionModel().getSelectedIndex());
+                    }
 
+                }
+            });
 
+            cb2.valueProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue observableValue, String t, String t2) {
+                    if(t2 != null){
+                        refreshData(t2);
+                        hi2.collectionAll(cb2.getSelectionModel().getSelectedIndex());
+                    }
 
-            lineChart = new LineChart<>(linexAxis, lineyAxis);
-
-            lineChart.setLegendVisible(false);
-            lineChart.setAnimated(false);
-            lineChart.setCreateSymbols(true);
-            lineChart.setAlternativeRowFillVisible(false);
-            lineChart.setAlternativeColumnFillVisible(false);
-            //lineChart.setHorizontalGridLinesVisible(false);
-            //lineChart.setVerticalGridLinesVisible(false);
-            lineChart.getXAxis().setVisible(false);
-            lineChart.getYAxis().setVisible(false);
-            lineChart.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
-//            lineChart.getStylesheets().addAll(getClass().getResource("chart.css").toExternalForm());
-
-            lineChart.setVisible(checkbox.isSelected());
-
-
-            ScatterChart<Number, Number> sc = getScatterChart(file, fp);
-
-
+                }
+            });
 
 
-            lineChart.getData().addAll(createChartData(fp.getList()));
-
-
-
-
-            CategoryAxis xAxis = new CategoryAxis();
-            NumberAxis yAxis = new NumberAxis();
-            BarChart barChart = new BarChart(xAxis, yAxis);
-            barChart.setData(createBarChartData(fp.getList(),0));
-            barChart.setLegendVisible(true);
-            xAxis.setTickLabelsVisible(false);
-            barChart.setBarGap(0);
-            barChart.setCategoryGap(0);
-            barChart.setCategoryGap(0);
-            barChart.prefWidth(1000);
-
-
-
-
-
-
-            CategoryAxis xAxis2 = new CategoryAxis();
-            NumberAxis yAxis2 = new NumberAxis();
-            BarChart barChart2 = new BarChart(xAxis2, yAxis2);
-            barChart2.setData(createBarChartData(fp.getList(),1));
-            barChart2.setLegendVisible(true);
-            xAxis2.setTickLabelsVisible(false);
-            barChart2.setBarGap(0);
-            barChart2.setCategoryGap(0);
-            barChart2.prefWidth(1000);
+            lineChartSetting(checkbox);
+            sc = getScatterChart(file,fp);
 
             HBox firstLine = new HBox();
-            firstLine.getChildren().addAll(cb,cb2, label,checkbox);
+            firstLine.getChildren().addAll(labelXAxis,cb,labelYAxis,cb2, label,checkbox, colorPicker,slider, btnLoadFile);
+            firstLine.setStyle("-fx-background-color: lightblue");
             firstLine.setAlignment(Pos.CENTER);
             firstLine.setSpacing(10);
             firstLine.setPadding(new Insets(5, 5, 5, 5));
 
 
-            HBox scatterChartLine = new HBox();
-            scatterChartLine.getChildren().addAll(barChart, barChart2);
-            scatterChartLine.setSpacing(1);
-            scatterChartLine.setPadding(new Insets(5, 5, 5, 5));
+            HBox histogram = new HBox();
+            histogram.getChildren().addAll(hi1.collectionAll(0),hi2.collectionAll(1));
+            histogram.setAlignment(Pos.CENTER);
+            histogram.setSpacing(10);
+            histogram.setPadding(new Insets(5, 5, 5, 5));
 
-/*
-			HBox histogramLine = new HBox();
-			histogramLine.getChildren().addAll();
-			histogramLine.setAlignment(Pos.CENTER);
-			histogramLine.setSpacing(10);
-			histogramLine.setPadding(new Insets(5, 5, 5, 5));
-*/
 
             root = new StackPane();
-
 
             root.getChildren().addAll(sc, lineChart);
 
 
-
-            System.out.println(sc.getData().get(0).getData());
-            System.out.println(lineChart.getData().get(0).getData());
             VBox vBox = new VBox();
-            //vBox.getChildren().addAll(firstLine,scatterChartLine,histogramLine);
-            vBox.getChildren().addAll(firstLine,root,scatterChartLine);
+            vBox.getChildren().addAll(firstLine,root,histogram);
             vBox.setAlignment(Pos.CENTER);
             vBox.setSpacing(10);
             vBox.setPadding(new Insets(5, 5, 5, 5));
 
-
-
+            pane = new StackPane();
             pane.getChildren().add(vBox);
 
-            Scene scene = new Scene(pane, 800, 800);
+            scene = new Scene(pane, 800, 800);
 
             stage.setScene(scene);
-            stage.setTitle("Hello JavaFX!");
+            stage.setTitle("Project");
             stage.show();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            alertWarning();
+
         }
-
-
+        catch (IOException e){
+            e.printStackTrace();
+            alertWarning();
+        }
     }
 
-    private ScatterChart<Number, Number> getScatterChart(File file, FileParser fp) {
+    private void lineChartSetting(CheckBox checkbox) throws IOException {
+        lineChart = new LineChart<>(linexAxis, lineyAxis);
+
+        lineChart.setLegendVisible(false);
+        lineChart.setAnimated(false);
+        lineChart.setCreateSymbols(true);
+        lineChart.setAlternativeRowFillVisible(false);
+        lineChart.setAlternativeColumnFillVisible(false);
+        lineChart.setHorizontalGridLinesVisible(true);
+        lineChart.setVerticalGridLinesVisible(true);
+        lineChart.getXAxis().setVisible(false);
+        lineChart.getYAxis().setVisible(false);
+        lineChart.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
+        lineChart.setVisible(checkbox.isSelected());
+        lineChart.getData().addAll(createChartData(lstInput));
+    }
+
+
+
+    private ScatterChart<Number, Number> getScatterChart(File file,FileParser fp) throws IOException {
         ScatterChart<Number,Number> sc = new ScatterChart<>(scxAxis,scyAxis);
 
-        /*sc.setTitle(file.getName());
-        lineChart.setTitle(file.getName());*/
-        sc.setPrefSize(1000,600);
+        sc.setTitle(file.getName());
+        lineChart.setTitle(file.getName());
+
         sc.setLegendVisible(false);
-        sc.getData().addAll(createChartData(fp.getList()));
+        sc.getData().addAll(createChartData(lstInput));
         return sc;
     }
 
-    public FileParser getData(File file) throws FileNotFoundException {
+    public FileParser makeObject(File file) throws FileNotFoundException {
         String fileNameFormat = file.getAbsolutePath();
-        FileParser fp;
-        if (fileNameFormat.endsWith(".txt")) {
-
-            return new TabDelimited();
-
-        } else if (fileNameFormat.endsWith(".lin")) {
-
-            return new LineOriented();
-        }
-
-        return null;
+        return (FileParser)(fileNameFormat.endsWith(".txt")?new TabDelimited():(fileNameFormat.endsWith(".lin")?new LineOriented():null));
     }
 
-    private Series<Number, Number> createChartData(List<DataModel> lst) {
-        XYChart.Series<Number, Number> series1 =  new XYChart.Series<>();
-        series1 = new XYChart.Series<>();
-
-        if(lst.size() == 2){
-            DataModel dm1 = lst.get(0);
-            DataModel dm2 = lst.get(1);
-            if(!(dm1.getValues().size() == dm2.getValues().size())){
-                System.out.println("ERROR");
+    private Series<Number, Number> createChartData(List<Variable> lst) {
+        if(lst.size() > 2 ) {
+            cb.setDisable(false);
+            cb2.setDisable(false);
+            this.lstData = lst;
+        }
+        if(lst.size() >= 2){
+            Variable var1 = lst.get(0);
+            Variable var2 = lst.get(1);
+            if(!(var1.getValues().size() == var2.getValues().size())){
+                alertWarning();
             }
             else{
-                System.out.println("OK");
-                scxAxis.setLabel(dm1.getName());
-                scyAxis.setLabel(dm2.getName());
-                linexAxis.setLabel(dm1.getName());
-                lineyAxis.setLabel(dm2.getName());
+                scxAxis.setLabel(var1.getName());
+                scyAxis.setLabel(var2.getName());
+                linexAxis.setLabel(var1.getName());
+                lineyAxis.setLabel(var2.getName());
 
-                for (int i = 0 ; i < dm1.getValues().size(); i++){
-                    series1.getData().add(new XYChart.Data<Number, Number> (dm1.getValue(i), dm2.getValue(i)));
-
-                }
-                return series1;
+                return getXYChartSerie(var1, var2);
             }
-
         }
-        else {
-            //TODO for more Var.
-        }
-        System.out.println("ERROR");
+        alertWarning();
         return null;
     }
 
-    private ObservableList<Series<String, Double>> createBarChartData(List<DataModel> lst, int select) {
-
-        ObservableList<Series<String, Double>> answer = FXCollections.observableArrayList();
-        Series<String, Double> aSeries = new Series<String, Double>();
-
-        DataModel dm1 = lst.get(select);
-
-        aSeries.setName(dm1.getName());
-
-        Double max = Collections.max(dm1.getValues());
-        Double min = Collections.min((dm1.getValues()));
-        double range = ceil(Math.sqrt(dm1.getValues().size()));
-        double width = Math.abs((max-min)/range);
-        int n=0;
-        int count = 0;
-        int testCount =0;
-        for (int i = 0; i < range; i++) {
-            for (int m = 0 ; m < dm1.getValues().size(); m++){
-
-                if(min+width*i<=dm1.getValue(m) && min+width*(i+1)>=dm1.getValue(m)){
-                    count++;
-                }
-            }
-            n++;
-
-            System.out.println(count);
-            aSeries.getData().add(new XYChart.Data(Integer.toString(i), count));
-            testCount+=count;
-            count=0;
-        }
-        System.out.println(dm1.getValues().size());
-        System.out.println("range:" +range);
-        System.out.println("count:" +testCount);
-        answer.addAll(aSeries);
-
-        return answer;
+    private void alertWarning() {
+        alert.setTitle("Warning");
+        alert.setHeaderText("File-Problem");
+        alert.setContentText("Cannot open");
     }
 
 
+    private void alertWarningFatalError() {
+        alert.setTitle("Fatal Error!");
+        alert.setHeaderText("File-Problem");
+        alert.setContentText("Program will closed");
+
+        alert.showAndWait();
+    }
+
+    private XYChart.Series<Number, Number> getXYChartSerie(Variable var1, Variable var2){
+        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+
+        for (int i = 0 ; i < var1.getValues().size(); i++){
+            XYChart.Data<Number, Number> dataPoint = new XYChart.Data<>(var1.getValue(i), var2.getValue(i));
+            series1.getData().add(dataPoint);
+            Circle circle = new Circle();
+
+            circle.setFill(colorPicker.getValue());
+            circle.radiusProperty().bind(slider.valueProperty());
+            circle.fillProperty().bind(colorPicker.valueProperty());
+
+            dataPoint.setNode(circle);
+        }
+        return series1;
+    }
 
 
     public static void main(String[] args){

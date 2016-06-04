@@ -1,12 +1,15 @@
 package ch.fhnw.project.io;
 
-import ch.fhnw.project.datenmodell.DataModel;
+import java.util.*;
 
-import java.io.File;
-import java.util.List;
+import ch.fhnw.project.datamodel.Variable;
+
+import java.io.*;
 
 public interface FileParser {
 
-	public void readData(File file);
-	public List<DataModel> getList();
+	List<Variable> readData(File file) throws IOException;
+
 }
+
+

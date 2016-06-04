@@ -1,5 +1,0 @@
-Auf eine Format einigen!
--LineOriented und TabDelimited -> momentan zwei unterschiedlichen Formatliste Var1;Var2;x0;y0,x1,y1.... oder
-Var1;Var2;x0,x1,y0,y1....
-
-Histo und Scatter brauchen keine Interface, da sie einzeln aufgerufen werden können.
